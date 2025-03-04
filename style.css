@@ -1,0 +1,94 @@
+/* Importar Bootstrap */
+@import url('https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css');
+
+/* Estilos generales */
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #1a1a1a;
+    color: #f8f9fa;
+}
+
+/* Navbar */
+.navbar {
+    background-color: #222;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+}
+.navbar-brand {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f8f9fa;
+    transition: color 0.3s ease-in-out;
+}
+.navbar-brand:hover {
+    color: #d4af37;
+}
+.navbar-nav .nav-link {
+    color: #f8f9fa;
+    transition: color 0.3s ease-in-out;
+}
+.navbar-nav .nav-link:hover {
+    color: #d4af37;
+}
+
+/* Botones */
+.btn-primary {
+    background-color: #d4af37;
+    border-color: #b58e2f;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(212, 175, 55, 0.4);
+}
+.btn-primary:hover {
+    background-color: #b58e2f;
+    border-color: #926c22;
+    transform: scale(1.05);
+    box-shadow: 0px 6px 12px rgba(212, 175, 55, 0.6);
+}
+
+.btn-secondary {
+    background-color: #444;
+    border-color: #666;
+    transition: all 0.3s ease-in-out;
+}
+.btn-secondary:hover {
+    background-color: #666;
+    border-color: #888;
+    transform: scale(1.05);
+}
+
+/* Tarjetas (Cards) */
+.card {
+    background-color: #2a2a2a;
+    color: #f8f9fa;
+    border: 1px solid #444;
+    border-radius: 8px;
+    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    box-shadow: 0px 4px 8px rgba(255, 255, 255, 0.1);
+}
+.card:hover {
+    transform: scale(1.05);
+    border-color: #d4af37;
+    box-shadow: 0px 6px 12px rgba(255, 255, 255, 0.2);
+}
+
+/* Footer */
+.footer {
+    background-color: #222;
+    color: #f8f9fa;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+    font-size: 0.9rem;
+}
+
+/* Diseño Responsive */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.2rem;
+    }
+    .btn {
+        font-size: 0.9rem;
+    }
+    .card {
+        margin-bottom: 15px;
+    }
+}
