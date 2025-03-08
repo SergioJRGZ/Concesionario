@@ -1,13 +1,10 @@
 <?php
 session_start();
 $conexion = mysqli_connect("localhost", "root", "rootroot", "concesionario");
-
 if (mysqli_connect_errno()) {
     die("Error de conexión: " . mysqli_connect_error());
 }
-
 $mensaje = "";
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if (empty($_POST["dni"]) || empty($_POST["password"])) {
         $mensaje = "Por favor, completa todos los campos.";
@@ -36,7 +33,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION["nombre"] = $usuario["nombre"];
                             $_SESSION["tipo"] = $usuario["tipo"];
                             
-                            // Redirigir con mensaje de éxito
                             header("Location: index.php?login=success");
                             exit;
                         } else {
