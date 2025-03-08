@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Agregar Usuario</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
     <style>
         body {
@@ -49,8 +47,6 @@
     </style>
 </head>
 <body>
-
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="index.php">🚗 Concesionario</a>
@@ -66,17 +62,13 @@
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center fw-bold">👤 Agregar Usuario</h2>
         <p class="text-center text-secondary">Complete los campos para registrar un nuevo usuario.</p>
 
-        <!-- Mensajes de éxito/error -->
         <div class="container">
             <?php echo $mensaje; ?>
         </div>
-
-        <!-- Formulario -->
         <div class="card p-4 mx-auto mt-4" style="max-width: 500px;">
             <form method="post">
                 <div class="mb-3">
@@ -108,13 +100,10 @@
             </form>
         </div>
     </div>
-
-    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
