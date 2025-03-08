@@ -5,10 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Buscar Usuario</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
     <style>
         body {
@@ -60,7 +58,6 @@
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container">
             <a class="navbar-brand" href="index.php">🚗 Concesionario</a>
@@ -75,12 +72,10 @@
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center fw-bold">🔍 Buscar Usuario</h2>
         <p class="text-center text-secondary">Introduce el nombre o DNI del usuario que deseas buscar.</p>
 
-        <!-- Formulario de búsqueda -->
         <div class="card p-4 mx-auto mt-4" style="max-width: 500px;">
             <form method="post">
                 <div class="mb-3">
@@ -90,7 +85,6 @@
             </form>
         </div>
 
-        <!-- Resultados de la búsqueda -->
         <div class="mt-4">
             <?php if ($resultado && $resultado->num_rows > 0) { ?>
                 <h3 class="text-center">📋 Resultados:</h3>
@@ -107,12 +101,10 @@
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
