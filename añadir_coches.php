@@ -6,12 +6,11 @@ $pass = "rootroot";
 $db = "concesionario";
 $conn = mysqli_connect($host, $user, $pass, $db);
 
-// Verificar conexión
 if (!$conn) {
     die("Error de conexión: " . mysqli_connect_error());
 }
 
-// Verificar si el usuario ha iniciado sesión y si es comprador, vendedor o administrador
+// Verificamos si el usuario ha iniciado sesión y con que usuario, si es comprador, vendedor o administrador
 if (!isset($_SESSION["tipo"]) || ($_SESSION["tipo"] !== "administrador" && $_SESSION["tipo"] !== "comprador" && $_SESSION["tipo"] !== "vendedor")) {
     die("Acceso denegado. Debes ser administrador, vendedor o comprador para agregar coches.");
 }
@@ -20,29 +19,23 @@ $mensaje = "";
 
 // Procesar el formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $modelo = htmlspecialchars(trim($_POST["modelo"]));
-    $marca = htmlspecialchars(trim($_POST["marca"]));
-    $color = htmlspecialchars(trim($_POST["color"]));
-    $precio = floatval($_POST["precio"]);
-    $foto = htmlspecialchars(trim($_POST["foto"]));
+    $modelo = isset($_POST["modelo"]) ? trim($_POST["modelo"]) : "";
+    $marca = isset($_POST["marca"]) ? trim($_POST["marca"]) : "";
+    $color = isset($_POST["color"]) ? trim($_POST["color"]) : "";
+    $precio = isset($_POST["precio"]) ? floatval($_POST["precio"]) : 0;
+    $foto = isset($_POST["foto"]) ? trim($_POST["foto"]) : "";
 
-    if (!empty($modelo) && !empty($marca) && !empty($color) && $precio > 0 && !empty($foto)) {
-        $sql = "INSERT INTO Coches (modelo, marca, color, precio, alquilado, foto) 
-                VALUES (?, ?, ?, ?, 0, ?)";
-        $stmt = mysqli_prepare($conn, $sql);
-        mysqli_stmt_bind_param($stmt, "sssds", $modelo, $marca, $color, $precio, $foto);
-
-        if (mysqli_stmt_execute($stmt)) {
+    if ($modelo && $marca && $color && $precio > 0 && $foto) {
+        $sql = "INSERT INTO Coches (modelo, marca, color, precio, alquilado, foto) VALUES ('$modelo', '$marca', '$color', $precio, 0, '$foto')";
+        if (mysqli_query($conn, $sql)) {
             $mensaje = "<div class='alert alert-success text-center'>Coche agregado correctamente. <a href='listar_coches.php' class='alert-link'>Ver coches</a></div>";
         } else {
             $mensaje = "<div class='alert alert-danger text-center'>Error al agregar el coche.</div>";
         }
-        mysqli_stmt_close($stmt);
     } else {
         $mensaje = "<div class='alert alert-warning text-center'>Todos los campos son obligatorios.</div>";
     }
 }
-
 mysqli_close($conn);
 ?>
 
@@ -52,14 +45,10 @@ mysqli_close($conn);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Agregar Coche</title>
-
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-dark text-light">
-
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -75,8 +64,6 @@ mysqli_close($conn);
             </div>
         </div>
     </nav>
-
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center">Agregar Coche</h2>
 
@@ -118,12 +105,9 @@ mysqli_close($conn);
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer text-center mt-5">
         <p>&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
-
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
