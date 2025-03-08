@@ -1,41 +1,33 @@
 <?php
 session_start();
 $conexion = mysqli_connect("localhost", "root", "rootroot", "concesionario");
-
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
+if (!$conexion) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
-
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nombre = htmlspecialchars($_POST["nombre"]);
-    $apellidos = htmlspecialchars($_POST["apellidos"]);
-    $dni = htmlspecialchars($_POST["dni"]);
-    $password = password_hash($_POST["password"], PASSWORD_DEFAULT);
-    $tipo = $_POST["tipo"];
+    $nombre = isset($_POST["nombre"]) ? htmlspecialchars($_POST["nombre"]) : "";
+    $apellidos = isset($_POST["apellidos"]) ? htmlspecialchars($_POST["apellidos"]) : "";
+    $dni = isset($_POST["dni"]) ? htmlspecialchars($_POST["dni"]) : "";
+    $password = isset($_POST["password"]) ? password_hash($_POST["password"], PASSWORD_DEFAULT) : "";
+    $tipo = isset($_POST["tipo"]) ? $_POST["tipo"] : "";
     $saldo = 0;
-
     // Verificar si el DNI ya está registrado
-    $stmt = $conexion->prepare("SELECT id_usuario FROM Usuarios WHERE dni = ?");
-    $stmt->bind_param("s", $dni);
-    $stmt->execute();
-    $result = $stmt->get_result();
-
-    if ($result->num_rows > 0) {
+    $sql_check = "SELECT id_usuario FROM Usuarios WHERE dni = '$dni'";
+    $result = mysqli_query($conexion, $sql_check);
+    if (mysqli_num_rows($result) > 0) {
         echo "Error: El DNI ya está registrado.";
     } else {
         // Insertar el usuario
-        $sql = "INSERT INTO Usuarios (nombre, apellidos, dni, password, tipo, saldo) VALUES (?, ?, ?, ?, ?, ?)";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("sssssd", $nombre, $apellidos, $dni, $password, $tipo, $saldo);
-
-        if ($stmt->execute()) {
+        $sql = "INSERT INTO Usuarios (nombre, apellidos, dni, password, tipo, saldo) VALUES ('$nombre', '$apellidos', '$dni', '$password', '$tipo', $saldo)";
+        
+        if (mysqli_query($conexion, $sql)) {
             echo "Registro exitoso. <a href='login.php'>Iniciar sesión</a>";
         } else {
             echo "Error en el registro.";
         }
     }
-    $stmt->close();
 }
+mysqli_close($conexion);
 ?>
 
 <!DOCTYPE html>
@@ -45,15 +37,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Registro de Usuario</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-dark text-light">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -68,7 +57,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container d-flex flex-column justify-content-center align-items-center vh-100">
         <div class="card p-4 bg-secondary text-light" style="max-width: 400px; width: 100%;">
             <h2 class="text-center">Registro de Usuario</h2>
@@ -113,12 +101,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer text-center mt-5">
         <p>&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
