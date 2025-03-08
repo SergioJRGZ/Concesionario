@@ -1,41 +1,22 @@
 <?php
 $conexion = mysqli_connect("localhost", "root", "rootroot", "concesionario");
 
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
+if (!$conexion) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
 
 $mensaje = "";
-
 if (isset($_GET["id"])) {
-    $id = intval($_GET["id"]); // Convertir ID a número entero para mayor seguridad
-
-    // Verificar si el coche existe antes de eliminarlo
-    $sql_check = "SELECT * FROM Coches WHERE id_coche = ?";
-    $stmt_check = $conexion->prepare($sql_check);
-    $stmt_check->bind_param("i", $id);
-    $stmt_check->execute();
-    $resultado = $stmt_check->get_result();
-
-    if ($resultado->num_rows > 0) {
-        // Eliminar el coche con consulta preparada
-        $sql = "DELETE FROM Coches WHERE id_coche = ?";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("i", $id);
-
-        if ($stmt->execute()) {
-            $mensaje = "<div class='alert alert-success text-center'>Coche eliminado correctamente. <a href='listar_coches.php' class='alert-link'>Volver</a></div>";
-        } else {
-            $mensaje = "<div class='alert alert-danger text-center'>Error al eliminar el coche.</div>";
-        }
-
-        $stmt->close();
+    $id = intval($_GET["id"]);
+    $sql = "DELETE FROM Coches WHERE id_coche = $id";
+    if (mysqli_query($conexion, $sql) && mysqli_affected_rows($conexion) > 0) {
+        $mensaje = "<div class='alert alert-success text-center'>Coche eliminado correctamente. <a href='listar_coches.php' class='alert-link'>Volver</a></div>";
     } else {
         $mensaje = "<div class='alert alert-warning text-center'>El coche no existe o ya ha sido eliminado.</div>";
     }
-
-    $stmt_check->close();
 }
+
+mysqli_close($conexion);
 ?>
 
 <!DOCTYPE html>
@@ -45,15 +26,12 @@ if (isset($_GET["id"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Eliminar Coche</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -68,7 +46,6 @@ if (isset($_GET["id"])) {
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center">Eliminar Coche</h2>
 
@@ -79,12 +56,10 @@ if (isset($_GET["id"])) {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer mt-5">
         <p class="text-center">&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
