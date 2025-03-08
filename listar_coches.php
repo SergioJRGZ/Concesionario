@@ -31,13 +31,11 @@ if (!$resultado) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Lista de Coches</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -52,7 +50,6 @@ if (!$resultado) {
         </div>
     </nav>
 
-    <!-- Contenido -->
     <div class="container mt-5">
         <h2 class="text-center">Lista de Coches</h2>
 
@@ -93,7 +90,6 @@ if (!$resultado) {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer mt-5">
         <p class="text-center">&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
