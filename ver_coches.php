@@ -4,50 +4,38 @@ if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "comprador") {
     header("Location: login.php");
     exit();
 }
-
 $conexion = mysqli_connect("localhost", "root", "rootroot", "concesionario");
-
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
+if (!$conexion) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
-
 $coche = null;
 $mensaje = "";
-
 if (isset($_GET["id"])) {
     $id_coche = intval($_GET["id"]);
-    $stmt = $conexion->prepare("SELECT * FROM Coches WHERE id_coche = ?");
-    $stmt->bind_param("i", $id_coche);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-    $coche = $resultado->fetch_assoc();
-    $stmt->close();
+    $sql = "SELECT * FROM Coches WHERE id_coche = $id_coche";
+    $resultado = mysqli_query($conexion, $sql);
+    $coche = mysqli_fetch_assoc($resultado);
 }
-
-if ($_SERVER["REQUEST_METHOD"] == "POST" && $coche) {
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($coche["id_coche"])) {
     if ($coche["alquilado"] == 0) {
         $id_usuario = $_SESSION["id_usuario"];
         $fecha_prestado = date("Y-m-d H:i:s");
-
-        $stmt_alquiler = $conexion->prepare("INSERT INTO Alquileres (id_usuario, id_coche, prestado) VALUES (?, ?, ?)");
-        $stmt_alquiler->bind_param("iis", $id_usuario, $id_coche, $fecha_prestado);
-
-        if ($stmt_alquiler->execute()) {
-            $stmt_actualizar = $conexion->prepare("UPDATE Coches SET alquilado = 1 WHERE id_coche = ?");
-            $stmt_actualizar->bind_param("i", $id_coche);
-            $stmt_actualizar->execute();
-            $stmt_actualizar->close();
-
+        
+        $sql_alquiler = "INSERT INTO Alquileres (id_usuario, id_coche, prestado) VALUES ($id_usuario, $id_coche, '$fecha_prestado')";
+        
+        if (mysqli_query($conexion, $sql_alquiler)) {
+            $sql_actualizar = "UPDATE Coches SET alquilado = 1 WHERE id_coche = $id_coche";
+            mysqli_query($conexion, $sql_actualizar);
+            
             $mensaje = "<div class='alert alert-success text-center'>¡Coche alquilado con éxito!</div>";
         } else {
             $mensaje = "<div class='alert alert-danger text-center'>Error al alquilar el coche.</div>";
         }
-
-        $stmt_alquiler->close();
     } else {
         $mensaje = "<div class='alert alert-warning text-center'>Este coche ya ha sido alquilado.</div>";
     }
 }
+mysqli_close($conexion);
 ?>
 
 <!DOCTYPE html>
@@ -57,15 +45,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $coche) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Detalles del Coche</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -81,7 +66,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $coche) {
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center">Detalles del Coche</h2>
 
@@ -106,18 +90,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && $coche) {
             <div class="alert alert-danger text-center mt-3">Coche no encontrado.</div>
         <?php } ?>
 
-        <!-- Botón de regreso -->
         <div class="text-center mt-4">
             <a href="buscar_coches_compradores.php" class="btn btn-secondary">Volver a la búsqueda</a>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer text-center mt-5">
         <p>&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
