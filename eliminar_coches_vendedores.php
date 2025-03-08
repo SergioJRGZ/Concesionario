@@ -7,41 +7,34 @@ if (!isset($_SESSION["id_usuario"]) || $_SESSION["tipo"] != "vendedor") {
 
 $conexion = mysqli_connect("localhost", "root", "rootroot", "concesionario");
 
-if ($conexion->connect_error) {
-    die("Error de conexión: " . $conexion->connect_error);
+if (!$conexion) {
+    die("Error de conexión: " . mysqli_connect_error());
 }
 
 $mensaje = "";
 
 if (isset($_GET["id"])) {
-    $id_coche = intval($_GET["id"]); // Seguridad: convertir a número entero
-
-    // Verificar que el coche pertenece al vendedor
-    $sql_check = "SELECT * FROM Coches WHERE id_coche = ? AND id_vendedor = ?";
-    $stmt_check = $conexion->prepare($sql_check);
-    $stmt_check->bind_param("ii", $id_coche, $_SESSION["id_usuario"]);
-    $stmt_check->execute();
-    $resultado = $stmt_check->get_result();
+    $id_coche = intval($_GET["id"]);
+    $id_vendedor = $_SESSION["id_usuario"];
     
-    if ($resultado->num_rows > 0) {
-        // Eliminar el coche con consulta preparada
-        $sql = "DELETE FROM Coches WHERE id_coche = ?";
-        $stmt = $conexion->prepare($sql);
-        $stmt->bind_param("i", $id_coche);
-        
-        if ($stmt->execute()) {
+    // Verificar si el coche pertenece al vendedor
+    $sql_check = "SELECT id_coche FROM Coches WHERE id_coche = $id_coche AND id_vendedor = $id_vendedor";
+    $resultado = mysqli_query($conexion, $sql_check);
+    
+    if (mysqli_num_rows($resultado) > 0) {
+        // Si el coche existe y pertenece al vendedor, eliminarlo
+        $sql_delete = "DELETE FROM Coches WHERE id_coche = $id_coche";
+        if (mysqli_query($conexion, $sql_delete)) {
             $mensaje = "<div class='alert alert-success text-center'>Coche eliminado correctamente. <a href='coches_vendedores.php' class='alert-link'>Volver</a></div>";
         } else {
             $mensaje = "<div class='alert alert-danger text-center'>Error al eliminar el coche.</div>";
         }
-
-        $stmt->close();
     } else {
-        $mensaje = "<div class='alert alert-warning text-center'>No tienes permiso para eliminar este coche.</div>";
+        $mensaje = "<div class='alert alert-warning text-center'>No tienes permiso para eliminar este coche o no existe.</div>";
     }
-
-    $stmt_check->close();
 }
+
+mysqli_close($conexion);
 ?>
 
 <!DOCTYPE html>
@@ -51,15 +44,12 @@ if (isset($_GET["id"])) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Eliminar Coche</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -75,7 +65,6 @@ if (isset($_GET["id"])) {
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center">Eliminar Coche</h2>
 
@@ -86,12 +75,10 @@ if (isset($_GET["id"])) {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer mt-5">
         <p class="text-center">&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
