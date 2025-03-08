@@ -17,13 +17,11 @@ if ($conn->connect_error) {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Bienvenido al Concesionario</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body class="bg-dark text-light">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -48,7 +46,6 @@ if ($conn->connect_error) {
         </div>
     </nav>
 
-    <!-- Mensajes de éxito o error después de una acción -->
     <div class="container mt-3">
         <?php if (isset($_GET['mensaje'])) { ?>
             <div class="alert alert-success text-center">
@@ -62,12 +59,10 @@ if ($conn->connect_error) {
         <?php } ?>
     </div>
 
-    <!-- Contenido principal -->
     <div class="container text-center mt-5">
         <h1 class="fw-bold">Bienvenido al Concesionario</h1>
         <p class="lead">Elija una opción para continuar</p>
-
-        <!-- Opciones de login y registro -->
+        
         <?php if (!isset($_SESSION["nombre"])) { ?>
             <div class="mt-4">
                 <a href="login.php" class="btn btn-primary btn-lg m-2">Iniciar Sesión</a>
@@ -75,7 +70,6 @@ if ($conn->connect_error) {
             </div>
         <?php } ?>
 
-        <!-- Opciones adicionales -->
         <div class="row mt-5">
             <div class="col-md-4">
                 <div class="card bg-secondary text-light text-center">
@@ -107,12 +101,10 @@ if ($conn->connect_error) {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer mt-5">
         <p class="text-center">&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
