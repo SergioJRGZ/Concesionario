@@ -1,12 +1,8 @@
 <?php
 session_start();
-$host = "localhost";
-$user = "root";
-$pass = "rootroot";
-$db = "concesionario";
-$conn = mysqli_connect($host, $user, $pass, $db);
+$conexion = mysqli_connect("localhost", "root", "rootroot", "concesionario");
 
-if (!$conn) {
+if (!$conexion) {
     die("Error de conexión: " . mysqli_connect_error());
 }
 
@@ -21,15 +17,11 @@ $id_usuario = $_SESSION["id_usuario"];
 $sql = "SELECT A.id_alquiler, C.id_coche, C.modelo, C.marca, C.color, C.precio, A.prestado, A.devuelto 
         FROM Alquileres A
         JOIN Coches C ON A.id_coche = C.id_coche
-        WHERE A.id_usuario = ? 
+        WHERE A.id_usuario = $id_usuario
         ORDER BY A.prestado DESC";
 
-$stmt = mysqli_prepare($conn, $sql);
-mysqli_stmt_bind_param($stmt, "i", $id_usuario);
-mysqli_stmt_execute($stmt);
-$resultado = mysqli_stmt_get_result($stmt);
+$resultado = mysqli_query($conexion, $sql);
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
