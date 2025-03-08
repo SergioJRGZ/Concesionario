@@ -14,14 +14,10 @@ if ($conexion->connect_error) {
 $coche = null;
 
 if (isset($_GET["id"])) {
-    $id_coche = intval($_GET["id"]); // Seguridad: convertir a número entero
-    $sql = "SELECT * FROM Coches WHERE id_coche = ?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("i", $id_coche);
-    $stmt->execute();
-    $resultado = $stmt->get_result();
-    $coche = $resultado->fetch_assoc();
-    $stmt->close();
+    $id_coche = intval($_GET["id"]);
+    $sql = "SELECT * FROM Coches WHERE id_coche = $id_coche";
+    $resultado = mysqli_query($conexion, $sql);
+    $coche = mysqli_fetch_assoc($resultado);
 
     if (!$coche) {
         die("Coche no encontrado.");
@@ -32,24 +28,22 @@ $mensaje = "";
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $id_coche = intval($_POST["id_coche"]);
-    $modelo = htmlspecialchars($_POST["modelo"]);
-    $marca = htmlspecialchars($_POST["marca"]);
-    $color = htmlspecialchars($_POST["color"]);
-    $precio = floatval($_POST["precio"]);
-    $foto = htmlspecialchars($_POST["foto"]);
+    $modelo = isset($_POST["modelo"]) ? htmlspecialchars($_POST["modelo"]) : "";
+    $marca = isset($_POST["marca"]) ? htmlspecialchars($_POST["marca"]) : "";
+    $color = isset($_POST["color"]) ? htmlspecialchars($_POST["color"]) : "";
+    $precio = isset($_POST["precio"]) ? floatval($_POST["precio"]) : 0;
+    $foto = isset($_POST["foto"]) ? htmlspecialchars($_POST["foto"]) : "";
 
-    $sql = "UPDATE Coches SET modelo=?, marca=?, color=?, precio=?, foto=? WHERE id_coche=?";
-    $stmt = $conexion->prepare($sql);
-    $stmt->bind_param("ssssdi", $modelo, $marca, $color, $precio, $foto, $id_coche);
-
-    if ($stmt->execute()) {
+    $sql = "UPDATE Coches SET modelo='$modelo', marca='$marca', color='$color', precio=$precio, foto='$foto' WHERE id_coche=$id_coche";
+    
+    if (mysqli_query($conexion, $sql)) {
         $mensaje = "<div class='alert alert-success text-center'>Coche actualizado correctamente. <a href='mis_coches.php' class='alert-link'>Volver</a></div>";
     } else {
         $mensaje = "<div class='alert alert-danger text-center'>Error al actualizar el coche.</div>";
     }
-
-    $stmt->close();
 }
+
+mysqli_close($conexion);
 ?>
 
 <!DOCTYPE html>
@@ -59,15 +53,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Editar Coche</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 
-    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -83,7 +74,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container mt-5">
         <h2 class="text-center">Editar Coche</h2>
 
@@ -127,12 +117,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer mt-5">
         <p class="text-center">&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
