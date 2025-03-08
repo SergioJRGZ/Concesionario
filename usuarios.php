@@ -1,7 +1,5 @@
 <?php
 session_start();
-
-// Verificar si el usuario ha iniciado sesión y es administrador
 if (!isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== "administrador") {
     // Redirigir a index.php si no es administrador
     header("Location: index.php?mensaje=Acceso denegado.");
@@ -16,12 +14,10 @@ if (!isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== "administrador") {
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Gestión de Usuarios</title>
 
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
 </head>
 <body class="bg-dark text-light">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -36,12 +32,10 @@ if (!isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== "administrador") {
         </div>
     </nav>
 
-    <!-- Contenido principal -->
     <div class="container text-center mt-5">
         <h2 class="fw-bold">Gestión de Usuarios</h2>
         <p class="lead">Seleccione una opción para administrar los usuarios.</p>
 
-        <!-- Opciones de gestión -->
         <div class="row mt-5">
             <div class="col-md-4">
                 <div class="card bg-secondary text-light text-center">
@@ -72,18 +66,15 @@ if (!isset($_SESSION["tipo"]) || $_SESSION["tipo"] !== "administrador") {
             </div>
         </div>
 
-        <!-- Botón de regreso -->
         <div class="text-center mt-5">
             <a href="index.php" class="btn btn-primary">⬅ Volver al inicio</a>
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer text-center mt-5">
         <p>&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
 
-    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
