@@ -29,7 +29,6 @@ $id_usuario = isset($_SESSION["id_usuario"]) ? $_SESSION["id_usuario"] : null;
 </head>
 <body class="bg-dark text-light">
 
-    <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-secondary">
         <div class="container">
             <a class="navbar-brand" href="index.php">Concesionario</a>
@@ -57,7 +56,6 @@ $id_usuario = isset($_SESSION["id_usuario"]) ? $_SESSION["id_usuario"] : null;
         </div>
     </nav>
 
-    <!-- Contenido -->
     <div class="container mt-5">
         <h2 class="text-center">Lista de Coches</h2>
 
@@ -142,7 +140,6 @@ $id_usuario = isset($_SESSION["id_usuario"]) ? $_SESSION["id_usuario"] : null;
         </div>
     </div>
 
-    <!-- Footer -->
     <footer class="footer mt-5">
         <p class="text-center">&copy; 2025 Concesionario. Todos los derechos reservados.</p>
     </footer>
